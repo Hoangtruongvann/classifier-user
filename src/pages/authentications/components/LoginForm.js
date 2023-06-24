@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "universal-cookie";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Form = () => {
+const LoginForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const cookies = new Cookies();
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +19,20 @@ const Form = () => {
   const inputPassword = (e) => {
     setPassword(e.target.value);
   };
+  const submit = (e) => {
+    e.preventDefault();
 
+    cookies.set("_token", "ok");
+    cookies.set("email", email);
+    toast.success("Login successfully!");
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    if (cookies.get("_token")) navigate("/");
+  });
   return (
-    <div>
+    <form onSubmit={submit}>
       <ToastContainer />
       <div className="form-group first">
         <label for="username">Email</label>
@@ -67,8 +79,8 @@ const Form = () => {
       >
         Login
       </button>
-    </div>
+    </form>
   );
 };
 
-export default Form;
+export default LoginForm;

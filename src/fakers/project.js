@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faInfo } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 const columns = [
   {
     name: "#",
@@ -11,11 +12,7 @@ const columns = [
     selector: (row) => row.title,
     sortable: true,
   },
-  {
-    name: "Created by",
-    selector: (row) => row.created_by,
-    sortable: true,
-  },
+
   {
     name: "Status",
     selector: (row) => row.status,
@@ -23,10 +20,12 @@ const columns = [
   {
     name: "Actions",
     button: true,
-    cell: () => (
+    cell: (record) => (
       <>
-        <FontAwesomeIcon icon={faEdit} className="mr-2" />
-        <FontAwesomeIcon icon={faTrash} />
+        <Link to={"/projects/" + record.id + "/operator"}>
+          {" "}
+          <FontAwesomeIcon icon={faEdit} className="mr-2" />
+        </Link>
       </>
     ),
   },

@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../../components/navbar";
-
-import Form from "./form";
+import LoginForm from "./components/LoginForm";
 
 const Login = () => {
   return (
@@ -27,7 +26,7 @@ const Login = () => {
                       consectetur adipisicing.
                     </p>
                   </div>
-                  <Form />
+                  <LoginForm />
                 </div>
               </div>
             </div>

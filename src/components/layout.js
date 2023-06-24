@@ -1,11 +1,21 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import Cookies from "universal-cookie";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
+import { ToastContainer } from "react-toastify";
 
-const Layout = ({ children }) => {
+const Layout = () => {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!cookies.get("_token")) navigate("/login");
+  });
+
   return (
     <div>
+      <ToastContainer />
       <div>
         <Navbar />
         <section className="relative">
