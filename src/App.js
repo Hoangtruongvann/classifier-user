@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout";
-import { Dashboard } from "./pages/dashboard";
-import { Login } from "./pages/authentications";
-import { Profile } from "./pages/profile";
-import { ProjectsTable, Operator } from "./pages/projects";
+import { Dashboard } from "./pages/dashboard/index";
+import { Login } from "./pages/authentications/index";
+import { Profile } from "./pages/profile/index";
+import { ProjectsTable, Operator } from "./pages/projects/index";
 
 function App() {
   return (

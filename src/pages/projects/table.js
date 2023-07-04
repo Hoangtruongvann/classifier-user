@@ -7,9 +7,10 @@ const Table = () => {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       setPending(false);
-    }, 2000);
+    }, 200);
     return () => clearTimeout(timeout);
   }, []);
+
   return (
     <DataTable
       columns={columns}
