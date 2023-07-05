@@ -1,8 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { data2 } from "../../fakers/project";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-
+import sampleServices from "../../service/sampleServices";
+import axiosClient from "../../service/request";
+import request from "../../service/request";
 const listAnswers = [
   {
     id: 1,
@@ -20,9 +22,10 @@ const listAnswers = [
 ];
 
 function App() {
-  const [answers, setAnswers] = useState(listAnswers);
+  const [answers, setAnswers] = useState([]);
+  const [sample, setSample] = useState('');
   const newAnswerRef = useRef();
-
+const [form, setForm] = useState('')
   const deleteAnswer = (id) => {
     setAnswers(answers.filter((e) => e.id !== id));
   };
@@ -43,6 +46,36 @@ function App() {
     console.log(answers);
   };
 
+
+  // get id from url http://localhost:3000/projects/1/operator
+  const id = window.location.pathname.split("/")[2];
+  // get samples
+  const getSample = async () => {
+    try {
+      const response = await axiosClient.get(`/samples/?project_id=${id}&status=true`);
+      setSample(response.data[0].sample);
+      setAnswers([...answers,response.data[0].label])
+      // handle response
+      console.log([...answers,response.data[0].label])
+      console.log(response.data[0].label)
+    } catch (error) {
+      console.error(error);
+    }
+
+  };
+
+  useEffect(() => {
+    getSample();
+  }, []);
+
+  const handleAddNewValue = () => {
+   console.log(form)
+  setAnswers([...answers,form])
+  }
+
+  const handleDeleteAnswer = (value) => {
+    setAnswers(answers.filter((e) => e !== value));
+  }
   return (
     <div>
       <div
@@ -55,7 +88,7 @@ function App() {
           boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
         }}
       >
-        <p style={{ color: "black" }}>{data2.question}</p>
+        <p style={{ color: "black" }}>{sample}</p>
       </div>
       <div style={{ marginTop: 30 }}>
         <div>
@@ -67,7 +100,10 @@ function App() {
               padding: 10,
             }}
             placeholder="Add new answer"
-            ref={newAnswerRef}
+            value={form}
+            onChange={(e) => setForm(e.target.value)}
+         
+            // ref={newAnswerRef}
           ></input>
           <button
             style={{
@@ -78,7 +114,8 @@ function App() {
               borderRadius: 10,
               color: "white",
             }}
-            onClick={() => onAddNewAnswer()}
+            // onClick={() => onAddNewAnswer()}
+            onClick={handleAddNewValue}
           >
             Add
           </button>
@@ -90,9 +127,9 @@ function App() {
         <div style={{ margin: 10 }}>
           <ul>
             {answers.length > 0 ? (
-              answers.map((e) => (
+              answers.map((e,i) => (
                 <div
-                  key={e.id}
+                  key={i}
                   style={{
                     width: "100%",
                     border: "1px solid grey",
@@ -111,8 +148,8 @@ function App() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <text>{e.content}</text>
-                    <button onClick={() => deleteAnswer(e.id)}>
+                    <text>{e}</text>
+                    <button onClick={()=>handleDeleteAnswer(e)}>
                       <FontAwesomeIcon icon={faTrash} className="mr-2" />
                     </button>
                   </div>

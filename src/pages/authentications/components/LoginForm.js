@@ -35,9 +35,8 @@ const LoginForm = () => {
     <form onSubmit={submit}>
       <ToastContainer />
       <div className="form-group first">
-        <label for="username">Email</label>
+        <label for="username">Username</label>
         <input
-          type="email"
           className="form-control"
           id="email"
           value={email}

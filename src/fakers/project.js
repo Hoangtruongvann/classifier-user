@@ -20,7 +20,8 @@ const dateFormat = (dateJson) => {
   return dd + "/" + mm + "/" + yyyy;
 };
 
-const user_check = "user1";
+// change this for access
+const user_check = ["user1", "admin2"];
 
 const columns = [
   {
@@ -78,14 +79,16 @@ const columns = [
     button: true,
     grow: 1,
     cell: (record) => {
-      const check = record.created_user === user_check;
+
+// check if record.created_user is in user_check
+        const check = user_check.includes(record.created_user);
 
       const onPress = () => {
         alert("You do not have permission to edit");
       };
 
       return check ? (
-        <Link to={"/projects/" + record.id + "/operator"}>
+        <Link to={"/projects/" + record.projectId + "/operator"}>
           <FontAwesomeIcon icon={faEdit} className="mr-2" />
         </Link>
       ) : (
@@ -93,6 +96,10 @@ const columns = [
           <FontAwesomeIcon icon={faEdit} className="mr-2" />
         </button>
       );
+  
+
+     
+
     },
   },
 ];
