@@ -30,10 +30,10 @@ function App() {
   };
 
   const onSubmit = async () => {
-    console.log(answers);
-    const res = await axiosClient.put('/samples/lable?id=${id}&lable=${lable}', {
+    console.log(sample);
+    const res = await axiosClient.put(`/samples/lable?id=${sample.id}&lable=${form}`, {
       id: sample.id,
-      label: answers
+      label: form
   });
   };
 
@@ -44,7 +44,7 @@ function App() {
   const getSample = async () => {
     try {
       const response = await axiosClient.get(`/samples/?project_id=${id}&status=true`);
-      setSample(response.data[0].sample);
+      setSample(response.data[0]);
       setAnswers([...answers,response.data[0].label])
       // handle response
       console.log([...answers,response.data[0].label])
@@ -79,7 +79,7 @@ function App() {
           boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
         }}
       >
-        <p style={{ color: "black" }}>{sample}</p>
+        <p style={{ color: "black" }}>{sample.sample}</p>
       </div>
       <div style={{ marginTop: 30 }}>
         <div>
