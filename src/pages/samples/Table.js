@@ -7,22 +7,24 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { projectServices } from "../../service";
+import { sampleServices } from "../../service";
 
 const Table = () => {
+  const { id } = useParams();
+
   const [pending, setPending] = useState(true);
-  const [projects, setProjects] = useState([]);
-  const navigate = useNavigate();
-  const getProjects = async () => {
+  const [samples, setSamples] = useState([]);
+
+  const getSamples = async () => {
     setPending(true);
-    const { data } = await projectServices.get();
-    setProjects(data);
+    const { data } = await sampleServices.getSamplesByProjectId(id);
+    setSamples(data);
     setPending(false);
   };
   useEffect(() => {
-    getProjects();
+    getSamples();
   }, []);
 
   const columns = [
@@ -32,17 +34,22 @@ const Table = () => {
       sortable: true,
     },
     {
-      name: "Project Name",
-      selector: (row) => row.projectName,
+      name: "Label",
+      selector: (row) => row.label,
     },
     {
-      name: "Type",
-      selector: (row) => row.projectType,
+      name: "Sample",
+      selector: (row) => row.sample,
       sortable: true,
     },
     {
-      name: "Description",
-      selector: (row) => row.description,
+      name: "Project ID",
+      selector: (row) => row.project_id,
+      sortable: true,
+    },
+    {
+      name: "User ID",
+      selector: (row) => row.created_user,
       sortable: true,
     },
     {
@@ -50,7 +57,7 @@ const Table = () => {
       button: true,
       cell: (row) => (
         <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ">
-          {row.status}
+          active
         </span>
       ),
     },
@@ -59,13 +66,9 @@ const Table = () => {
       name: "Actions",
       button: true,
       cell: (row) => (
-        <>
-          <FontAwesomeIcon
-            icon={faListDots}
-            className="mr-2"
-            onClick={() => navigate("/projects/" + row.projectId + "/samples")}
-          />
-        </>
+        <Link to={"/projects/" + id + "/samples/" + row.id}>
+          <FontAwesomeIcon icon={faEdit} className="mr-2" />
+        </Link>
       ),
     },
   ];
@@ -74,7 +77,7 @@ const Table = () => {
     <>
       <DataTable
         columns={columns}
-        data={projects}
+        data={samples}
         direction="auto"
         fixedHeader
         fixedHeaderScrollHeight="800px"
@@ -83,7 +86,7 @@ const Table = () => {
         pagination
         responsive
         progressPending={pending}
-        title={"Projects"}
+        title={"Samples"}
       />
     </>
   );

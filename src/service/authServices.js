@@ -15,8 +15,8 @@ const authService = {
       });
 
       if (data.access_token) {
-        cookies.remove("token");
-        cookies.set("token", true);
+        cookies.remove("auth");
+        cookies.set("auth", true);
         const user = await request.get("/users/info");
         cookies.set("user", user.data);
         return true;
@@ -28,6 +28,9 @@ const authService = {
   },
   async register(user) {
     return await request.post("/user/register", user);
+  },
+  async logout() {
+    return await request.post("/logout");
   },
 };
 
